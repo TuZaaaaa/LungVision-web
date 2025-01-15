@@ -27,7 +27,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 假设使用某种方式判断是否已登录，比如从 Vuex / Pinia / localStorage 中获取登录状态
   const isAuthenticated = Boolean(localStorage.getItem('token'));
-  // const isAuthenticated = store.state.isLoggedIn; // 例如从 store 中获取
+  // const isAuthenticated = stores.state.isLoggedIn; // 例如从 stores 中获取
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 如果即将访问的路由需要登录，而用户没有登录，则跳转登录页
