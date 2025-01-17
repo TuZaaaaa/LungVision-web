@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  Home
+  <div id="home">
+    Home
+  </div>
 </template>
 
 <style scoped>

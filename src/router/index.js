@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import {useUserStore} from "@/stores/user.js";
 
 // 路由配置
 const routes = [
@@ -8,7 +9,7 @@ const routes = [
     component: () => import('@/views/LoginView.vue'),
   },
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: () => import('@/views/HomeView.vue'),
     meta: {
@@ -25,9 +26,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // 假设使用某种方式判断是否已登录，比如从 Vuex / Pinia / localStorage 中获取登录状态
-  const isAuthenticated = Boolean(localStorage.getItem('token'));
-  // const isAuthenticated = stores.state.isLoggedIn; // 例如从 stores 中获取
+  // // 假设使用某种方式判断是否已登录，比如从 Vuex / Pinia / localStorage 中获取登录状态
+  console.log(useUserStore().isLoggedIn)
+  const isAuthenticated = useUserStore().isLoggedIn;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 如果即将访问的路由需要登录，而用户没有登录，则跳转登录页
