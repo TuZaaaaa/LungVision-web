@@ -10,6 +10,9 @@ export const useUserStore = defineStore('userStore', {
         token: '',
     }),
 
+    // 持久化
+    persist: true,
+
     // getters: 相当于 Vue 中的 computed，用于派生新的状态或简化访问
     getters: {
         isLoggedIn: (state) => {
