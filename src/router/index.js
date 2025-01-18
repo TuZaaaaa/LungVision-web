@@ -15,7 +15,18 @@ const routes = [
     meta: {
       requiresAuth: true, // 需要登录权限
     },
+    children: [
+      {
+        path: 'dataImport',
+        component: () => import('@/views/DataImportView.vue'),
+      }
+    ]
   },
+  {
+    path: '/dataImport',
+    name: 'DataImport',
+    component: () => import('@/views/DataImportView.vue'),
+  }
   // 其他路由...
 ];
 

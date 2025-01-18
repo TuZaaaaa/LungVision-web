@@ -23,5 +23,12 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '/lvs-api') // 重写路径，去掉 /api 前缀
       }
     }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/assets/styles/main.scss";`, // 自动注入全局变量
+      }
+    }
   }
 })
