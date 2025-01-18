@@ -25,7 +25,7 @@
 
   &-text {
     font-size: 16px;
-    font-weight: 400;
+    font-weight: bolder;
     color: #fff;
   }
 }
