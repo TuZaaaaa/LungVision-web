@@ -1,11 +1,26 @@
 <script setup>
+/** 引入useLayoutStore */
+import { useLayoutStore } from '@/stores/layout'
+/** 引入storeToRefs()，从store中解构属性保持响应性 */
+import { storeToRefs } from 'pinia'
+/** 引入animate.css */
+// import 'animate.css'
+
+
+/** 创建layoutStore */
+const layoutStore = useLayoutStore()
+
+/** 从layoutStore中解构属性 */
+const { isCollapse } = storeToRefs(layoutStore)
 
 </script>
 
 <template>
   <div class="logo">
 <!--    <img class="logo-image" :src="getImageUrl('logo.png')" alt="logo.png" />-->
-    <h1 class="logo-text">肺CT图像处理分析系统</h1>
+    <Transition enter-active-class="animate__animated animate__fadeInDown" mode="out-in">
+      <h1 class="logo-text" v-if="!isCollapse">肺CT图像处理分析系统</h1>
+    </Transition>
   </div>
 </template>
 

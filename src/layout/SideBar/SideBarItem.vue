@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import {onMounted} from "vue";  // 引入 Vue Router
+import {onMounted} from "vue";
+import {Files, Printer, UploadFilled} from "@element-plus/icons-vue";  // 引入 Vue Router
 
 const router = useRouter()  // 获取路由实例
 
@@ -38,36 +39,32 @@ onMounted(() => {
   <!-- 下拉菜单 -->
   <el-menu-item index="1" @click="handleMenuItemClick('1')">
     <template #title>
-      <el-icon><location /></el-icon>
+      <el-icon><UploadFilled /></el-icon>
       <span>数据导入</span>
     </template>
   </el-menu-item>
 
   <el-sub-menu index="2">
     <template #title>
-      <el-icon><location /></el-icon>
+      <el-icon><Files /></el-icon>
       <span>信息管理</span>
     </template>
-    <!-- 菜单项 -->
     <el-menu-item index="2-1">
       <el-icon><icon-menu /></el-icon>
       <span>病人管理</span>
     </el-menu-item>
-    <!-- 下拉菜单 -->
     <el-menu-item index="2-2">
       <el-icon><icon-menu /></el-icon>
-      <template #title>检查管理</template>
+      <span>检查管理</span>
     </el-menu-item>
     <el-menu-item index="2-3">
       <el-icon><icon-menu /></el-icon>
-      <template #title>图片管理</template>
+      <span>图片管理</span>
     </el-menu-item>
   </el-sub-menu>
 
-
-  <!-- 菜单项 -->
   <el-menu-item index="3">
-    <el-icon><icon-menu /></el-icon>
+    <el-icon><Printer /></el-icon>
     <span>图像分割</span>
   </el-menu-item>
 </template>
@@ -95,8 +92,10 @@ onMounted(() => {
 .el-menu-item.is-active {
   position: relative;
 
+  .el-icon {
+    z-index: 1;
+  }
   span {
-    position: absolute;
     z-index: 1;
   }
 
