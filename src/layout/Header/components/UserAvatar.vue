@@ -51,5 +51,8 @@ const exit = () => {
     font-size: 16px;
     font-weight: bold;
   }
+  :hover {
+    cursor: pointer;
+  }
 }
 </style>
