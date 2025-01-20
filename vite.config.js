@@ -21,6 +21,11 @@ export default defineConfig({
         target: 'http://localhost:8080', // 目标服务器地址
         changeOrigin: true, // 允许跨域
         rewrite: (path) => path.replace(/^\/api/, '/lvs-api') // 重写路径，去掉 /api 前缀
+      },
+      '/py-api': {
+        target: 'http://127.0.0.1:5000', // 目标服务器地址
+        changeOrigin: true, // 允许跨域
+        rewrite: (path) => path.replace(/^\/py-api/, '/lvs-py-api')
       }
     }
   },
