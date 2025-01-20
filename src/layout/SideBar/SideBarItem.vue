@@ -38,10 +38,8 @@ onMounted(() => {
 <template>
   <!-- 下拉菜单 -->
   <el-menu-item index="1" @click="handleMenuItemClick('1')">
-    <template #title>
       <el-icon><UploadFilled /></el-icon>
       <span>数据导入</span>
-    </template>
   </el-menu-item>
 
   <el-sub-menu index="2">

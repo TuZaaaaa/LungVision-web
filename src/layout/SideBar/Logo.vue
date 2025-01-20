@@ -42,6 +42,18 @@ const { isCollapse } = storeToRefs(layoutStore)
     font-size: 16px;
     font-weight: bolder;
     color: #fff;
+    animation: slideIn 0.5s forwards;
+  }
+}
+/* 动画效果 */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 </style>
