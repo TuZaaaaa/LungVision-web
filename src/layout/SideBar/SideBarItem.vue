@@ -12,9 +12,9 @@ const handleMenuItemClick = (index) => {
     case '1':
       router.push({ path: '/home/dataImport' });  // 跳转到数据导入页面
       break;
-    // case '2-1':
-    //   router.push({ path: '/patient-management' });  // 跳转到病人管理页面
-    //   break;
+    case '2-1':
+      router.push({ path: '/home/patientManagement' });  // 跳转到病人管理页面
+      break;
     // case '2-2':
     //   router.push({ path: '/check-management' });  // 跳转到检查管理页面
     //   break;
@@ -47,9 +47,9 @@ onMounted(() => {
       <el-icon><Files /></el-icon>
       <span>信息管理</span>
     </template>
-    <el-menu-item index="2-1">
+    <el-menu-item index="2-1" @click="handleMenuItemClick('2-1')">
       <el-icon><icon-menu /></el-icon>
-      <span>病人管理</span>
+      <span>患者管理</span>
     </el-menu-item>
     <el-menu-item index="2-2">
       <el-icon><icon-menu /></el-icon>

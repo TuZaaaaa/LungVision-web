@@ -4,6 +4,10 @@ import {useUserStore} from "@/stores/user.js";
 // 路由配置
 const routes = [
   {
+    path: '/',
+    redirect: '/home'
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/LoginView.vue'),
@@ -19,14 +23,13 @@ const routes = [
       {
         path: 'dataImport',
         component: () => import('@/views/DataImportView.vue'),
-      }
+      },
+      {
+        path: 'patientManagement',
+        component: () => import('@/views/PatientManagementView.vue'),
+      },
     ]
   },
-  {
-    path: '/dataImport',
-    name: 'DataImport',
-    component: () => import('@/views/DataImportView.vue'),
-  }
   // 其他路由...
 ];
 
