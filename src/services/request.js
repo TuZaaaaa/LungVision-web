@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '', // 通常使用环境变量或写死
-    timeout: 5000, // 超时时间：5s
+    timeout: 10000, // 超时时间：10s
 });
 
 // 如果有需要，可以配置更多默认设置
