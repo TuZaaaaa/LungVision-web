@@ -13,11 +13,11 @@ const handleMenuItemClick = (index) => {
       router.push({ path: '/home/dataImport' });  // 跳转到数据导入页面
       break;
     case '2-1':
-      router.push({ path: '/home/patientManagement' });  // 跳转到病人管理页面
+      router.push({ path: '/home/patientManagement' });  // 跳转到患者管理页面
       break;
-    // case '2-2':
-    //   router.push({ path: '/check-management' });  // 跳转到检查管理页面
-    //   break;
+    case '2-2':
+      router.push({ path: '/home/studyManagement' });  // 跳转到检查管理页面
+      break;
     // case '2-3':
     //   router.push({ path: '/image-management' });  // 跳转到图片管理页面
     //   break;
@@ -51,7 +51,7 @@ onMounted(() => {
       <el-icon><icon-menu /></el-icon>
       <span>患者管理</span>
     </el-menu-item>
-    <el-menu-item index="2-2">
+    <el-menu-item index="2-2" @click="handleMenuItemClick('2-2')">
       <el-icon><icon-menu /></el-icon>
       <span>检查管理</span>
     </el-menu-item>

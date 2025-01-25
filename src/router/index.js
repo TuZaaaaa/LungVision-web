@@ -28,6 +28,10 @@ const routes = [
         path: 'patientManagement',
         component: () => import('@/views/PatientManagementView.vue'),
       },
+      {
+        path: 'studyManagement',
+        component: () => import('@/views/StudyManagementView.vue'),
+      },
     ]
   },
   // 其他路由...
