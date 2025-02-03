@@ -66,12 +66,13 @@ const search = () => {
   })
 }
 
-const insert = () => {
+const displayInsertDialog = () => {
   console.log(insertForm.value)
-  insertDialogFormVisible.value = false
+  insertDialogFormVisible.value = true
   insertPatient(insertForm.value).then(() => {
     ElMessage.success("添加成功")
     getList()
+    insertDialogFormVisible.value = false
   }).catch(err => {
     ElMessage.error(err);
   })
@@ -132,7 +133,7 @@ const del = () => {
         />
       </el-col>
       <el-button id="search-button" type="primary" @click="search">搜索</el-button>
-      <el-button type="success" @click="insertDialogFormVisible = true">添加</el-button>
+      <el-button type="success" @click="displayInsertDialog">添加</el-button>
       <el-button type="warning" @click="displayUpdateDialog">修改</el-button>
       <el-button type="danger" @click="del">删除</el-button>
     </el-row>
