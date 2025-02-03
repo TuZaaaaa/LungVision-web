@@ -1,9 +1,10 @@
 <script setup>
 import {ref, onMounted} from 'vue'
-import {Search} from "@element-plus/icons-vue";
+import {Search, Upload} from "@element-plus/icons-vue";
 import {deleteStudy, insertStudy, list, queryByName, updateStudy} from "@/api/study.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
+import DataImportView from "@/views/DataImportView.vue";
 
 
 const loading = ref(false)
@@ -21,6 +22,7 @@ const tabColumn = ref([
 const input = ref('')
 const insertDialogFormVisible = ref(false)
 const updateDialogFormVisible = ref(false)
+const uploadDialogVisible = ref(false)
 const insertForm = ref({
   patientId: '',
   studyDate: '',
@@ -126,6 +128,16 @@ const del = () => {
     ElMessage.error('已取消删除')
   })
 }
+
+const displayUploadDialog = () => {
+  console.log(selectedRows.value[0].id)
+  if (selectedRows.value.length !== 1) {
+    ElMessage.error('请选择一行进行上传')
+  } else {
+    uploadDialogVisible.value = true
+  }
+}
+
 </script>
 
 <template>
@@ -144,6 +156,9 @@ const del = () => {
       <el-button type="success" @click="displayInsertDialog">添加</el-button>
       <el-button type="warning" @click="displayUpdateDialog">修改</el-button>
       <el-button type="danger" @click="del">删除</el-button>
+      <el-button type="primary" @click="displayUploadDialog">
+        数据导入<el-icon class="el-icon--right"><Upload /></el-icon>
+      </el-button>
     </el-row>
 
     <el-table
@@ -238,6 +253,10 @@ const del = () => {
           <el-button type="primary" @click="update">确定</el-button>
         </div>
       </template>
+    </el-dialog>
+
+    <el-dialog title="数据导入" v-model="uploadDialogVisible">
+      <DataImportView :studyId="selectedRows.value?.[0]?.id"/>
     </el-dialog>
   </div>
 </template>
