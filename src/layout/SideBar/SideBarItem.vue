@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import {onMounted} from "vue";
-import {Files, Printer, UploadFilled} from "@element-plus/icons-vue";  // 引入 Vue Router
+import {DataBoard, Files, Printer} from "@element-plus/icons-vue";  // 引入 Vue Router
 
 const router = useRouter()  // 获取路由实例
 
@@ -10,7 +10,7 @@ const handleMenuItemClick = (index) => {
   // 根据菜单的 index 来决定跳转的路径
   switch(index) {
     case '1':
-      router.push({ path: '/home/dataImport' });  // 跳转到数据导入页面
+      router.push({ path: '/home/dashboard' });  // 跳转到 Dashboard 页面
       break;
     case '2-1':
       router.push({ path: '/home/patientManagement' });  // 跳转到患者管理页面
@@ -30,7 +30,7 @@ const handleMenuItemClick = (index) => {
 }
 
 onMounted(() => {
-  router.push({ path: '/home/dataImport' });  // 跳转到数据导入页面
+  // router.push({ path: '/home/dashboard' });  // 跳转到 Dashboard 页面
 })
 
 </script>
@@ -38,8 +38,8 @@ onMounted(() => {
 <template>
   <!-- 下拉菜单 -->
   <el-menu-item index="1" @click="handleMenuItemClick('1')">
-      <el-icon><UploadFilled /></el-icon>
-      <span>数据导入</span>
+      <el-icon><DataBoard /></el-icon>
+      <span>数据看板</span>
   </el-menu-item>
 
   <el-sub-menu index="2">

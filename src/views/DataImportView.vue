@@ -3,16 +3,19 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ref } from 'vue'
+import {ElMessage} from "element-plus";
+
+const props = defineProps(['studyId'])
 
 // 定义上传 URL 和额外的请求数据
 const uploadUrl = '/py-api/upload'
 const uploadData = ref({
-  studyId: 12345
+  studyId: props.studyId,
 })
 // const uploadHeaders = ref({
 //   Authorization: 'Bearer your-token'
 // })
-
+let uploadProgress = ref(0)
 const handleBeforeUpload = (file) => {
   // 使用 axios 自行发请求
   const formData = new FormData()
@@ -26,16 +29,16 @@ const handleBeforeUpload = (file) => {
       // ...uploadHeaders.value
     },
     onUploadProgress: (progressEvent) => {
-      const progress = (progressEvent.loaded / progressEvent.total) * 100
-      console.log(`上传进度：${progress}%`)
-      // Todo 引入进度条组件
+      uploadProgress.value = ((progressEvent.loaded / progressEvent.total) * 100).toFixed(2)
     }
   })
-      .then((response) => {
-        console.log('上传成功', response)
+      .then(() => {
+        
+        ElMessage.success('上传成功，请在任务管理页面查看导入任务状态')
+
       })
-      .catch((error) => {
-        console.log('上传失败', error)
+      .catch((err) => {
+        ElMessage.error(err)
       })
 
   // 阻止 el-upload 默认的上传行为
@@ -61,6 +64,8 @@ const handleBeforeUpload = (file) => {
         </div>
       </template>
     </el-upload>
+    <el-Text>上传进度：</el-Text>
+    <el-progress :text-inside="true" :stroke-width="26" :percentage="uploadProgress" />
   </div>
 </template>
 

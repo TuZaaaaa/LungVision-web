@@ -21,8 +21,8 @@ const routes = [
     },
     children: [
       {
-        path: 'dataImport',
-        component: () => import('@/views/DataImportView.vue'),
+        path: 'dashboard',
+        component: () => import('@/views/DashboardView.vue'),
       },
       {
         path: 'patientManagement',
