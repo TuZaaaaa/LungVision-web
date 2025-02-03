@@ -15,6 +15,7 @@ export default defineConfig({
     },
   },
   server: {
+    port: 1577,
     proxy: {
       // 代理所有以 /api 开头的请求
       '/api': {
