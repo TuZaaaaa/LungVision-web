@@ -5,7 +5,7 @@ import {useUserStore} from "@/stores/user.js";
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/home/dashboard'
   },
   {
     path: '/login',
