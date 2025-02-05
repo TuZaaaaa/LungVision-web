@@ -32,6 +32,10 @@ const routes = [
         path: 'studyManagement',
         component: () => import('@/views/StudyManagementView.vue'),
       },
+      {
+        path: 'taskManagement',
+        component: () => import('@/views/TaskManagementView.vue'),
+      },
     ]
   },
   // 其他路由...
