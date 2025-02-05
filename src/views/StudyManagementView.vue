@@ -37,6 +37,7 @@ const updateForm = ref({
   pixelSum: '',
 })
 const selectedRows = ref([])
+let selectStudyId = ref(0)
 
 onMounted(() => {
   getList()
@@ -130,7 +131,7 @@ const del = () => {
 }
 
 const displayUploadDialog = () => {
-  console.log(selectedRows.value[0].id)
+  selectStudyId.value = selectedRows.value[0].id
   if (selectedRows.value.length !== 1) {
     ElMessage.error('请选择一行进行上传')
   } else {
@@ -256,7 +257,7 @@ const displayUploadDialog = () => {
     </el-dialog>
 
     <el-dialog title="数据导入" v-model="uploadDialogVisible">
-      <DataImportView :studyId="selectedRows.value?.[0]?.id"/>
+      <DataImportView :studyId="selectStudyId"/>
     </el-dialog>
   </div>
 </template>

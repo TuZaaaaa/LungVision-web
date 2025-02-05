@@ -1,8 +1,7 @@
-
 <script setup>
-import { UploadFilled } from '@element-plus/icons-vue'
+import {UploadFilled} from '@element-plus/icons-vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import {ref} from 'vue'
 import {ElMessage} from "element-plus";
 
 const props = defineProps(['studyId'])
@@ -32,9 +31,12 @@ const handleBeforeUpload = (file) => {
       uploadProgress.value = ((progressEvent.loaded / progressEvent.total) * 100).toFixed(2)
     }
   })
-      .then(() => {
-        
-        ElMessage.success('上传成功，请在任务管理页面查看导入任务状态')
+      .then((res) => {
+        if (res.data.success) {
+          ElMessage.success('上传成功，请在任务管理页面查看导入任务状态')
+        } else {
+          ElMessage.error('上传失败')
+        }
 
       })
       .catch((err) => {
@@ -54,7 +56,9 @@ const handleBeforeUpload = (file) => {
         :before-upload="handleBeforeUpload"
         :multiple="true"
     >
-      <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
+      <el-icon class="el-icon--upload">
+        <UploadFilled/>
+      </el-icon>
       <div class="el-upload__text">
         将文件拖到此处，或 <em>点击上传</em>
       </div>
@@ -65,7 +69,7 @@ const handleBeforeUpload = (file) => {
       </template>
     </el-upload>
     <el-Text>上传进度：</el-Text>
-    <el-progress :text-inside="true" :stroke-width="26" :percentage="uploadProgress" />
+    <el-progress :text-inside="true" :stroke-width="26" :percentage="uploadProgress"/>
   </div>
 </template>
 
