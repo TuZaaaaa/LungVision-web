@@ -24,10 +24,11 @@ console.log('isCollapse', isCollapse)
     <!-- 左侧区域 -->
     <div class="nav-left">
       <!-- 折叠图标 -->
-<!--      <iconify-icon-->
-<!--          :icon-name="isCollapse ? 'ant-design:menu-unfold-outlined' : 'ant-design:menu-fold-outlined'"-->
-<!--          @click="changeCollapse">-->
-<!--      </iconify-icon>-->
+      <iconify-icon
+          class="icon"
+          :icon-name="isCollapse ? 'ant-design:menu-unfold-outlined' : 'ant-design:menu-fold-outlined'"
+          @click="changeCollapse">
+      </iconify-icon>
       <!-- 面包屑 -->
     </div>
     <!-- 右侧区域 -->
@@ -45,5 +46,9 @@ console.log('isCollapse', isCollapse)
   padding: 0 10px;
   height: 50px;
   border-bottom: 1px solid $border-color;
+}
+
+.icon {
+  cursor: pointer;
 }
 </style>
