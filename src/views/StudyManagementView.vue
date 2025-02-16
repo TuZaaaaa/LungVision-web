@@ -1,7 +1,14 @@
 <script setup>
 import {ref, onMounted} from 'vue'
-import {Search, Upload} from "@element-plus/icons-vue";
-import {deleteStudy, insertStudy, list, queryByName, updateStudy} from "@/api/study.js";
+import {Search, Upload, Picture} from "@element-plus/icons-vue";
+import {
+  deleteStudy,
+  insertStudy,
+  list,
+  queryByName,
+  updateStudy,
+  imageProcessWithStudyId
+} from "@/api/study.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
 import DataImportView from "@/views/DataImportView.vue";
@@ -139,6 +146,23 @@ const displayUploadDialog = () => {
   }
 }
 
+const imageProcess = () => {
+  selectStudyId.value = selectedRows.value[0].id
+  if (selectedRows.value.length !== 1) {
+    ElMessage.error('请选择一行进行图像处理')
+    return
+  }
+  imageProcessWithStudyId({ studyId: selectStudyId.value }).then((res) => {
+    if (res.data.success) {
+      ElMessage.success('图像任务处理完成')
+    } else {
+      ElMessage.error(res.data.msg)
+    }
+  }).catch(err => {
+    ElMessage.error(err)
+  })
+}
+
 </script>
 
 <template>
@@ -159,6 +183,9 @@ const displayUploadDialog = () => {
       <el-button type="danger" @click="del">删除</el-button>
       <el-button type="primary" @click="displayUploadDialog">
         数据导入<el-icon class="el-icon--right"><Upload /></el-icon>
+      </el-button>
+      <el-button type="primary" @click="imageProcess">
+        图像处理<el-icon class="el-icon--right"><Picture /></el-icon>
       </el-button>
     </el-row>
 

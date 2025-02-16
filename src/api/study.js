@@ -19,3 +19,7 @@ export function updateStudy(data) {
 export function deleteStudy(data) {
     return request.post('/api/study/delete', data)
 }
+
+export function imageProcessWithStudyId(data) {
+    return request.post('/py-api/image_process', data)
+}
