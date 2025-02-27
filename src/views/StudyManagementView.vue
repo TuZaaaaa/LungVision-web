@@ -1,13 +1,13 @@
 <script setup>
 import {ref, onMounted} from 'vue'
-import {Search, Upload, Picture} from "@element-plus/icons-vue";
+import {Search, Upload, Picture, Document} from "@element-plus/icons-vue";
 import {
   deleteStudy,
   insertStudy,
   list,
   queryByName,
   updateStudy,
-  imageProcessWithStudyId
+  imageProcessWithStudyId, reportGenerateWithStudyId
 } from "@/api/study.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
@@ -152,13 +152,63 @@ const imageProcess = () => {
     ElMessage.error('请选择一行进行图像处理')
     return
   }
-  imageProcessWithStudyId({ studyId: selectStudyId.value }).then((res) => {
+  imageProcessWithStudyId({studyId: selectStudyId.value}).then((res) => {
     if (res.data.success) {
       ElMessage.success('图像任务处理完成')
     } else {
       ElMessage.error(res.data.msg)
+      console.log(res)
     }
   }).catch(err => {
+    ElMessage.error(err)
+  })
+}
+
+const reportGenerate = () => {
+  selectStudyId.value = selectedRows.value[0].id
+  if (selectedRows.value.length !== 1) {
+    ElMessage.error('请选择一行进行图像处理')
+    return
+  }
+  reportGenerateWithStudyId({studyId: selectStudyId.value}).then((res) => {
+    // console.log(res.data.pdf)
+    console.log(res)
+    // Get the PDF data (encoded as base64 or binary)
+    const pdfData = res.data.pdf;
+
+    // Convert the PDF data to a Blob
+    const byteCharacters = atob(pdfData); // Decode the base64 data
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+      const slice = byteCharacters.slice(offset, offset + 1024);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const pdfBlob = new Blob(byteArrays, {type: 'application/pdf'});
+
+    // Create an Object URL for the Blob
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    // Create a link element to download the PDF
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'report.pdf';  // Optional: Specify the filename for the download
+    link.click();  // Trigger the download
+
+    if (res.success) {
+      ElMessage.success('报告生成任务处理完成')
+    } else {
+      ElMessage.error(res.data.msg)
+    }
+  }).catch(err => {
+    console.log('bb')
+    console.log(err)
     ElMessage.error(err)
   })
 }
@@ -182,10 +232,22 @@ const imageProcess = () => {
       <el-button type="warning" @click="displayUpdateDialog">修改</el-button>
       <el-button type="danger" @click="del">删除</el-button>
       <el-button type="primary" @click="displayUploadDialog">
-        数据导入<el-icon class="el-icon--right"><Upload /></el-icon>
+        数据导入
+        <el-icon class="el-icon--right">
+          <Upload/>
+        </el-icon>
       </el-button>
       <el-button type="primary" @click="imageProcess">
-        图像处理<el-icon class="el-icon--right"><Picture /></el-icon>
+        图像处理
+        <el-icon class="el-icon--right">
+          <Picture/>
+        </el-icon>
+      </el-button>
+      <el-button type="primary" @click="reportGenerate">
+        报告生成
+        <el-icon class="el-icon--right">
+          <Document/>
+        </el-icon>
       </el-button>
     </el-row>
 
@@ -254,7 +316,7 @@ const imageProcess = () => {
 
     <!-- 修改 -->
     <el-dialog title="修改检查记录" v-model="updateDialogFormVisible">
-       <el-form :model="updateForm">
+      <el-form :model="updateForm">
         <el-form-item label="患者编码：" label-width="120px">
           <el-input v-model="updateForm.patientId" autocomplete="off"/>
         </el-form-item>

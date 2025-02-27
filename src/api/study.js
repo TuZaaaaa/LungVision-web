@@ -23,3 +23,7 @@ export function deleteStudy(data) {
 export function imageProcessWithStudyId(data) {
     return request.post('/py-api/image_process', data)
 }
+
+export function reportGenerateWithStudyId(data) {
+    return request.post('/py-api/report_generate', data)
+}
