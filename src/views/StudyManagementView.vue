@@ -275,7 +275,7 @@ const reportGenerate = () => {
       />
     </el-table>
 
-    <div style="text-align:center;margin-top: 20px;margin-left: 1450px">
+    <div style="text-align:center;margin-top: 20px;margin-left: 20px">
       <el-pagination
           id="pagination"
           hide-on-single-page
