@@ -159,7 +159,7 @@ const del = () => {
       />
     </el-table>
 
-    <div style="text-align:center;margin-top: 20px">
+    <div style="text-align:center;margin-top: 20px;margin-left: 1450px">
       <el-pagination
           id="pagination"
           hide-on-single-page
