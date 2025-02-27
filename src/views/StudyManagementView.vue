@@ -86,6 +86,9 @@ const search = () => {
 const displayInsertDialog = () => {
   console.log(insertForm.value)
   insertDialogFormVisible.value = true
+}
+
+const insert = () => {
   insertStudy(insertForm.value).then(() => {
     ElMessage.success("添加成功")
     getList()
