@@ -15,6 +15,7 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
+    redirect: '/home/dashboard',
     component: () => import('@/views/HomeView.vue'),
     meta: {
       requiresAuth: true, // 需要登录权限
