@@ -105,7 +105,7 @@ const update = () => {
 }
 
 const del = () => {
-  ElMessageBox.confirm('请确认是否要删除?', '提示', {
+  ElMessageBox.confirm('请确认是否要删除（相关联的检查记录也将一并删除）?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
