@@ -7,7 +7,8 @@ import {
   list,
   queryByName,
   updateStudy,
-  imageProcessWithStudyId, reportGenerateWithStudyId
+  imageProcessWithStudyId, reportGenerateWithStudyId,
+  getTaskStatus
 } from "@/api/study.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
@@ -150,22 +151,52 @@ const displayUploadDialog = () => {
 }
 
 const imageProcess = () => {
-  selectStudyId.value = selectedRows.value[0].id
+  selectStudyId.value = selectedRows.value[0].id;
   if (selectedRows.value.length !== 1) {
-    ElMessage.error('请选择一行进行图像处理')
-    return
+    ElMessage.error('请选择一行进行图像处理');
+    return;
   }
-  imageProcessWithStudyId({studyId: selectStudyId.value}).then((res) => {
-    if (res.data.success) {
-      ElMessage.success('图像任务处理完成')
+
+  // 发起图像处理任务
+  imageProcessWithStudyId({ studyId: selectStudyId.value }).then((res) => {
+    if (res.success) {
+      console.log("后端传回了任务id");
+      const taskId = res.data.task_id; // 假设后端返回任务ID
+      ElMessage.success('图像处理任务已提交,请等待');
+      checkTaskStatus(taskId); // 开始轮询任务状态
     } else {
-      ElMessage.error(res.data.msg)
-      console.log(res)
+      console.log(1)
+      ElMessage.error(res.data.msg);
+      console.log(res);
     }
   }).catch(err => {
-    ElMessage.error(err)
-  })
-}
+    ElMessage.error(err);
+  });
+};
+
+// 轮询任务状态
+const checkTaskStatus = (taskId) => {
+  const interval = setInterval(() => {
+    getTaskStatus(taskId).then((res) => {
+      if (res.data.success) {
+        const task = res.data.data;
+        if (task.status === 'finished') {
+          clearInterval(interval); // 停止轮询
+          console.log('任务处理完成');
+          ElMessage.success('图像任务处理完成');
+        } 
+        // 如果任务仍在处理中，继续轮询
+      } else {
+        clearInterval(interval); // 停止轮询
+        ElMessage.error('获取任务状态失败: ' + res.msg);
+      }
+    }).catch(err => {
+      clearInterval(interval); // 停止轮询
+      ElMessage.error('获取任务状态失败: ' + err);
+    });
+  }, 300); // 每0.3秒轮询一次
+};
+
 
 const reportGenerate = () => {
   selectStudyId.value = selectedRows.value[0].id

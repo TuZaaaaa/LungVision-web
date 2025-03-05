@@ -1,4 +1,5 @@
 import request from '@/services/request.js';
+import axios from 'axios';
 
 export function list() {
     return request.post('/api/study/list')
@@ -23,6 +24,9 @@ export function deleteStudy(data) {
 export function imageProcessWithStudyId(data) {
     return request.post('/py-api/image_process', data)
 }
+const getTaskStatus = (taskId) => {
+    return axios.get(`/py-api/task_status/${taskId}`);
+  };export { getTaskStatus };
 
 export function reportGenerateWithStudyId(data) {
     return request.post('/py-api/report_generate', data)
