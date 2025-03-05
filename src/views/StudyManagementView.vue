@@ -196,7 +196,7 @@ const checkTaskStatus = (taskId) => {
       clearInterval(interval); // 停止轮询
       ElMessage.error('获取任务状态失败: ' + err);
     });
-  }, 300); // 每0.3秒轮询一次
+  }, 3000);
 };
 
 
