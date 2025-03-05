@@ -178,8 +178,10 @@ const imageProcess = () => {
 const checkTaskStatus = (taskId) => {
   const interval = setInterval(() => {
     getTaskStatus(taskId).then((res) => {
-      if (res.data.success) {
-        const task = res.data.data;
+      if (res.success) {
+        const task = res.data;
+        console.log(res.data)
+        console.log(task)
         if (task.status === 'finished') {
           clearInterval(interval); // 停止轮询
           console.log('任务处理完成');
