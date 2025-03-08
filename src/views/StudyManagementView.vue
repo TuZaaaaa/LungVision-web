@@ -13,6 +13,7 @@ import {
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
 import DataImportView from "@/views/DataImportView.vue";
+import VueOfficePdf from '@vue-office/pdf'  // 确保已安装并正确配置该组件
 
 
 const loading = ref(false)
@@ -31,6 +32,7 @@ const input = ref('')
 const insertDialogFormVisible = ref(false)
 const updateDialogFormVisible = ref(false)
 const uploadDialogVisible = ref(false)
+const reportDialogVisible = ref(false)
 const insertForm = ref({
   patientId: '',
   studyDate: '',
@@ -46,6 +48,8 @@ const updateForm = ref({
 })
 const selectedRows = ref([])
 let selectStudyId = ref(0)
+const pdfUrl = ref('')
+const showPreview = ref(false)
 
 onMounted(() => {
   getList()
@@ -206,47 +210,44 @@ const reportGenerate = () => {
     ElMessage.error('请选择一行进行图像处理')
     return
   }
-  reportGenerateWithStudyId({studyId: selectStudyId.value}).then((res) => {
-    // console.log(res.data.pdf)
-    console.log(res)
-    // Get the PDF data (encoded as base64 or binary)
-    const pdfData = res.data.pdf;
+  reportGenerateWithStudyId({ studyId: selectStudyId.value })
+      .then((res) => {
+        if (res.success) {
+          const pdfData = res.data.pdf
+          // 将 base64 解码为字节数据
+          const byteCharacters = atob(pdfData)
+          const byteArrays = []
+          for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+            const slice = byteCharacters.slice(offset, offset + 1024)
+            const byteNumbers = new Array(slice.length)
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i)
+            }
+            const byteArray = new Uint8Array(byteNumbers)
+            byteArrays.push(byteArray)
+          }
+          const pdfBlob = new Blob(byteArrays, { type: 'application/pdf' })
+          const url = URL.createObjectURL(pdfBlob)
+          pdfUrl.value = url
+          showPreview.value = true
+          reportDialogVisible.value = true
+          ElMessage.success('报告生成成功，请预览报告')
+        } else {
+          ElMessage.error(res.data.msg)
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        ElMessage.error(err)
+      })
+}
 
-    // Convert the PDF data to a Blob
-    const byteCharacters = atob(pdfData); // Decode the base64 data
-    const byteArrays = [];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-      const slice = byteCharacters.slice(offset, offset + 1024);
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-
-    const pdfBlob = new Blob(byteArrays, {type: 'application/pdf'});
-
-    // Create an Object URL for the Blob
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-
-    // Create a link element to download the PDF
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = 'report.pdf';  // Optional: Specify the filename for the download
-    link.click();  // Trigger the download
-
-    if (res.success) {
-      ElMessage.success('报告生成任务处理完成')
-    } else {
-      ElMessage.error(res.data.msg)
-    }
-  }).catch(err => {
-    console.log('bb')
-    console.log(err)
-    ElMessage.error(err)
-  })
+const downloadPdf = () => {
+  // 创建临时 a 标签并触发下载
+  const link = document.createElement('a')
+  link.href = pdfUrl.value
+  link.download = 'report.pdf'
+  link.click()
 }
 
 </script>
@@ -385,6 +386,16 @@ const reportGenerate = () => {
       <DataImportView :studyId="selectStudyId"/>
     </el-dialog>
   </div>
+
+  <el-dialog title="报告预览" v-model="reportDialogVisible">
+    <!-- 预览区域，仅当 pdfUrl 有值时显示 -->
+    <div v-if="showPreview" style="margin-top:20px;">
+      <!-- 使用 @vue-office/pdf 组件展示 PDF -->
+      <vue-office-pdf :src="pdfUrl" style="width:100%; height:600px;" />
+      <!-- 下载按钮 -->
+      <el-button type="success" style="margin-top:10px;" @click="downloadPdf">下载报告</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <style scoped>
