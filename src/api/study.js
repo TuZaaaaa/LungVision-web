@@ -4,8 +4,8 @@ export function list() {
     return request.post('/api/study/list')
 }
 
-export function queryByName(name) {
-    return request.post('/api/study/queryByName', null, {params: {name}})
+export function queryByPatientId(patientId) {
+    return request.post('/api/study/queryByPatientId', null, {params: {patientId}})
 }
 
 export function insertStudy(data) {

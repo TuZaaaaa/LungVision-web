@@ -5,10 +5,9 @@ import {
   deleteStudy,
   insertStudy,
   list,
-  queryByName,
   updateStudy,
   imageProcessWithStudyId, reportGenerateWithStudyId,
-  getTaskStatus
+  getTaskStatus, queryByPatientId
 } from "@/api/study.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
@@ -76,7 +75,7 @@ const getList = () => {
 
 const search = () => {
   console.log(input.value)
-  queryByName(input.value).then(res => {
+  queryByPatientId(input.value).then(res => {
     loading.value = false
     tableData.value = res.data.map(item => ({
       ...item,
