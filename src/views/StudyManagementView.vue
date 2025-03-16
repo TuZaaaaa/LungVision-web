@@ -386,7 +386,7 @@ const downloadPdf = () => {
     </el-dialog>
   </div>
 
-  <el-dialog title="报告预览" v-model="reportDialogVisible">
+  <el-dialog title="报告预览" v-model="reportDialogVisible" fullscreen>
     <!-- 预览区域，仅当 pdfUrl 有值时显示 -->
     <div v-if="showPreview" style="margin-top:20px;">
       <!-- 使用 @vue-office/pdf 组件展示 PDF -->
@@ -414,5 +414,11 @@ const downloadPdf = () => {
 
 .el-form-item {
   align-items: center;
+}
+
+/* 处理报告预览灰边 */
+:deep(.vue-office-pdf-wrapper) {
+  padding-top: 0 !important;
+  background-color: transparent !important;;
 }
 </style>
