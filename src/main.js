@@ -8,6 +8,8 @@ import ElementPlus from 'element-plus'
 
 import '@/assets/styles/_reset.scss'
 import 'element-plus/dist/index.css'
+// import * as ECharts from 'echarts';
+import VChart from 'vue-echarts';
 
 
 const app = createApp(App)
@@ -17,6 +19,7 @@ pinia.use(piniaPluginPersistedstate)
 app.use(router)
 app.use(ElementPlus)
 app.use(pinia)
+app.component('v-chart', VChart);
 
 // 全局挂载 axios 实例
 app.config.globalProperties.$axios = axiosInstance;
