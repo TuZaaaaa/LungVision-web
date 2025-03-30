@@ -1,13 +1,13 @@
 <script setup>
 import {ref, onMounted} from 'vue'
-import {Search, Upload, Picture, Document} from "@element-plus/icons-vue";
+import {Search, Upload, Picture, Document, Delete} from "@element-plus/icons-vue";
 import {
   deleteStudy,
   insertStudy,
   list,
   updateStudy,
   imageProcessWithStudyId, reportGenerateWithStudyId,
-  getTaskStatus, queryByPatientId
+  getTaskStatus, queryByPatientId, dataClear
 } from "@/api/study.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
@@ -153,6 +153,29 @@ const displayUploadDialog = () => {
   }
 }
 
+const displayClearDialog = () => {
+  selectStudyId.value = selectedRows.value[0].id
+  if (selectedRows.value.length !== 1) {
+    ElMessage.error('请选择一行进行数据清空')
+    return
+  }
+
+  ElMessageBox.confirm('请确认是否要清空已导入的数据?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    dataClear({studyId: selectStudyId.value}).then(() => {
+      ElMessage.success('数据清空成功')
+      getList()
+    }).catch(() => {
+      ElMessage.error('数据清空失败')
+    })
+  }).catch(() => {
+    ElMessage.error('已取消清空')
+  })
+}
+
 const imageProcess = () => {
   selectStudyId.value = selectedRows.value[0].id;
   if (selectedRows.value.length !== 1) {
@@ -271,6 +294,12 @@ const downloadPdf = () => {
         数据导入
         <el-icon class="el-icon--right">
           <Upload/>
+        </el-icon>
+      </el-button>
+      <el-button type="primary" @click="displayClearDialog">
+        数据清空
+        <el-icon class="el-icon--right">
+          <Delete/>
         </el-icon>
       </el-button>
       <el-button type="primary" @click="imageProcess">

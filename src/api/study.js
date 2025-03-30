@@ -31,3 +31,7 @@ export function getTaskStatus(taskId) {
 export function reportGenerateWithStudyId(data) {
     return request.post('/py-api/report_generate', data)
 }
+
+export function dataClear(data) {
+    return request.post('/py-api/data_clear', data)
+}
