@@ -64,7 +64,10 @@ const handleBeforeUpload = (file) => {
       </div>
       <template #tip>
         <div class="el-upload__tip">
-          支持文件类型：zip, rar
+          支持文件类型：zip， rar
+        </div>
+        <div class="el-upload__tip">
+          压缩包需要包含两个目录：img（用于存放导出的图片） ，dicom（用于存放导出的 CT 源文件），两个目录需保持文件数量一致
         </div>
       </template>
     </el-upload>
