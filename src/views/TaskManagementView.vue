@@ -34,6 +34,9 @@ const getList = () => {
     tableData.value = res.data.map(item => ({
       ...item,
     }))
+
+    // 留存一份完整，用与筛选
+    tableDataFull.value = tableData.value
     total.value = res.data.length
   }).catch(err => {
     ElMessage.error(err);
@@ -43,10 +46,46 @@ const getList = () => {
 const handleSelectionChange = (selectedItems) => {
   selectedRows.value = selectedItems
 }
+
+const selectTaskName = ref('')
+const taskNameOptions = ref([{value: '数据导入', label: '数据导入'}, {value: '图像处理', label: '图像处理'}, {value: '报告生成', label: '报告生成'}])
+const tableDataFull = ref([])
+
+const handleTaskNameSelectionChange = (val) => {
+  console.log(val)
+  if (val === '' || val === undefined) {
+    tableData.value = tableDataFull.value
+  } else {
+    tableData.value = tableDataFull.value.filter((item) => {
+      if (val === item.name) {
+        return true
+      }
+    })
+  }
+  total.value = tableData.value.length
+}
 </script>
 
 <template>
   <div>
+    <el-row id="flex flex-wrap gap-4 items-cente">
+<!--      Todo: 完善筛选 -->
+      <el-select
+          v-model="selectTaskName"
+          @change="handleTaskNameSelectionChange"
+          clearable
+          placeholder="任务名称"
+          size="large"
+          style="margin-left: 20px;width: 150px"
+      >
+        <el-option
+            v-for="item in taskNameOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+        />
+      </el-select>
+    </el-row>
     <el-table
         id="table"
         v-loading="loading"
