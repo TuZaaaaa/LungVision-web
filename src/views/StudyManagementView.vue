@@ -212,6 +212,7 @@ const checkTaskStatus = (taskId) => {
           clearInterval(interval); // 停止轮询
           console.log('任务处理完成');
           ElMessage.success('图像任务处理完成');
+          getList()
         } 
         // 如果任务仍在处理中，继续轮询
       } else {
