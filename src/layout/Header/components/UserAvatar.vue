@@ -48,7 +48,7 @@ const exit = () => {
     display: flex;
     align-items: center;
     margin-left: 5px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
   }
   :hover {
