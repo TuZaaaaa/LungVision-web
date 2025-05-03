@@ -25,7 +25,12 @@ const tabColumn = ref([
   {prop: 'patientId', label: '患者ID'},
   {prop: 'studyDate', label: '检查日期'},
   {prop: 'description', label: '检查描述'},
-  {prop: 'pixelSum', label: '总像素数'},
+  {prop: 'pixelPSum', label: '血灌注像素值'},
+  {prop: 'pixelVSum', label: '通气像素值'},
+  {prop: 'ventilationPerfusionRatio', label: '通气血流比'},
+  {prop: 'fileNum', label: '文件数量'},
+  {prop: 'executeTime', label: '图像处理时长（单位：秒）'},
+  {prop: 'processStatus', label: '数据处理状态'},
 ])
 const input = ref('')
 const insertDialogFormVisible = ref(false)
@@ -36,14 +41,12 @@ const insertForm = ref({
   patientId: '',
   studyDate: '',
   description: '',
-  pixelSum: '',
 })
 const updateForm = ref({
   id: '',
   patientId: '',
   studyDate: '',
   description: '',
-  pixelSum: '',
 })
 const selectedRows = ref([])
 let selectStudyId = ref(0)
@@ -93,10 +96,14 @@ const displayInsertDialog = () => {
 }
 
 const insert = () => {
-  insertStudy(insertForm.value).then(() => {
-    ElMessage.success("添加成功")
-    getList()
-    insertDialogFormVisible.value = false
+  insertStudy(insertForm.value).then((data) => {
+    if (data.success) {
+      ElMessage.success("添加成功")
+      getList()
+      insertDialogFormVisible.value = false
+    } else {
+      ElMessage.error("请选择可用的患者编码")
+    }
   }).catch(err => {
     ElMessage.error(err);
   })

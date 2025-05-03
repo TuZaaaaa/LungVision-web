@@ -35,7 +35,7 @@ const handleBeforeUpload = (file) => {
         if (res.data.success) {
           ElMessage.success('上传成功，请在任务管理页面查看导入任务状态')
         } else {
-          ElMessage.error('上传失败')
+          ElMessage.error('上传失败：' + res.data.msg)
         }
 
       })
@@ -67,7 +67,7 @@ const handleBeforeUpload = (file) => {
           支持文件类型：zip， rar
         </div>
         <div class="el-upload__tip">
-          压缩包需要包含两个目录：img（用于存放导出的图片） ，dicom（用于存放导出的 CT 源文件），两个目录需保持文件数量一致
+          压缩包需要包含一个根目录 data，下面包含 3 个子目录：dicom（用于存放导出的 CT 源文件）<br /> img_p（用于存放血灌注的 CT 图像） ，img_v（用于存放通气的 CT 图像），3 个目录需保持文件数量一致
         </div>
       </template>
     </el-upload>
