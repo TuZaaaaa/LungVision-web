@@ -172,8 +172,17 @@ const displayClearDialog = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    dataClear({studyId: selectStudyId.value}).then(() => {
-      ElMessage.success('数据清空成功')
+    dataClear({studyId: selectStudyId.value}).then((res) => {
+      if (res.success) {
+        console.log("后端传回了任务id");
+        const taskId = res.data.task_id; // 假设后端返回任务ID
+        ElMessage.success('数据清空任务已提交,请等待');
+        checkTaskStatus(taskId, '数据清空'); // 开始轮询任务状态
+      } else {
+        console.log(1)
+        ElMessage.error(res.data.msg);
+        console.log(res);
+      }
       getList()
     }).catch(() => {
       ElMessage.error('数据清空失败')
@@ -196,7 +205,7 @@ const imageProcess = () => {
       console.log("后端传回了任务id");
       const taskId = res.data.task_id; // 假设后端返回任务ID
       ElMessage.success('图像处理任务已提交,请等待');
-      checkTaskStatus(taskId); // 开始轮询任务状态
+      checkTaskStatus(taskId, '图像处理'); // 开始轮询任务状态
     } else {
       console.log(1)
       ElMessage.error(res.data.msg);
@@ -208,7 +217,7 @@ const imageProcess = () => {
 };
 
 // 轮询任务状态
-const checkTaskStatus = (taskId) => {
+const checkTaskStatus = (taskId, taskName) => {
   const interval = setInterval(() => {
     getTaskStatus(taskId).then((res) => {
       if (res.success) {
@@ -218,7 +227,7 @@ const checkTaskStatus = (taskId) => {
         if (task.status === 'finished') {
           clearInterval(interval); // 停止轮询
           console.log('任务处理完成');
-          ElMessage.success('图像任务处理完成');
+          ElMessage.success(`${taskName}处理完成`);
           getList()
         } 
         // 如果任务仍在处理中，继续轮询
