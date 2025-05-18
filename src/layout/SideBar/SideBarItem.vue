@@ -1,43 +1,44 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import {onMounted} from "vue";
-import {DataAnalysis, User, View, Timer, Picture, Printer} from "@element-plus/icons-vue";  // 引入 Vue Router
+import { useRouter, useRoute } from 'vue-router'
+import { computed } from "vue";
+import { DataAnalysis, User, View, Timer } from "@element-plus/icons-vue";
 
-const router = useRouter()  // 获取路由实例
+const router = useRouter();
+const route = useRoute();
 
-// 定义菜单项的路由路径
+// 路由路径与菜单 index 的映射
+const indexMap = {
+  '/home/dashboard': '1',
+  '/home/patientManagement': '2',
+  '/home/studyManagement': '3',
+  '/home/taskManagement': '4'
+};
+
+// 当前高亮菜单的 index
+const activeIndex = computed(() => {
+  return indexMap[route.path] || '1';
+});
+
+// 点击菜单跳转路由
 const handleMenuItemClick = (index) => {
-  // 根据菜单的 index 来决定跳转的路径
-  switch(index) {
-    case '1':
-      router.push({ path: '/home/dashboard' });  // 跳转到 Dashboard 页面
-      break;
-    case '2':
-      router.push({ path: '/home/patientManagement' });  // 跳转到患者管理页面
-      break;
-    case '3':
-      router.push({ path: '/home/studyManagement' });  // 跳转到检查管理页面
-      break;
-    case '4':
-      router.push({ path: '/home/taskManagement' });  // 跳转到任务管理页面
-      break;
-    default:
-      break;
+  const path = Object.keys(indexMap).find(key => indexMap[key] === index)
+  if (path && route.path !== path) {
+    router.push({ path });
   }
 }
-
-onMounted(() => {
-  // router.push({ path: '/home/dashboard' });  // 跳转到 Dashboard 页面
-})
-
 </script>
 
 <template>
-  <!-- 下拉菜单 -->
-  <el-menu-item index="1" @click="handleMenuItemClick('1')">
+  <el-menu
+      :default-active="activeIndex"
+      class="el-menu-vertical-demo"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b">
+    <el-menu-item index="1" @click="handleMenuItemClick('1')">
       <el-icon><DataAnalysis /></el-icon>
       <span>数据看板</span>
-  </el-menu-item>
+    </el-menu-item>
     <el-menu-item index="2" @click="handleMenuItemClick('2')">
       <el-icon><User /></el-icon>
       <span>患者管理</span>
@@ -50,10 +51,13 @@ onMounted(() => {
       <el-icon><Timer /></el-icon>
       <span>任务管理</span>
     </el-menu-item>
+  </el-menu>
 </template>
 
 <style lang="scss" scoped>
-
+.el-menu-item:hover {
+  background-color:  transparent;
+}
 
 .el-menu-item {
   &::after {
@@ -74,12 +78,15 @@ onMounted(() => {
 
 .el-menu-item.is-active {
   position: relative;
+  color: #fff !important;
 
   .el-icon {
     z-index: 1;
+    color: #fff !important;
   }
   span {
     z-index: 1;
+    color: #fff !important;
   }
 
   &::after {
@@ -87,36 +94,20 @@ onMounted(() => {
   }
 }
 
-.el-menu-item {
-  &.is-active {
-    &:hover {
-      span {
-        color: #fff;
-      }
-      :deep(.is-active) {
-        background-color: red !important;
-      }
-    }
-  }
-}
+// 其它相关样式
 .el-sub-menu {
   &.is-active {
     > :deep(.el-sub-menu__title) {
       color: #fff !important;
-
-
       :deep(.el-icon) {
-        color: #fff;
+        color: #fff !important;
       }
     }
   }
-
   :deep(.el-sub-menu__title) {
     &:hover {
       color: #fff !important;
     }
   }
 }
-
-
 </style>
