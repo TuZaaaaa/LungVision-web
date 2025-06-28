@@ -32,6 +32,14 @@ export function reportGenerateWithStudyId(data) {
     return request.post('/py-api/report_generate', data)
 }
 
+export function imagePreviewCount(data) {
+    return request.post('/py-api/image_preview_count', data)
+}
+
+export function imagePreview(data) {
+    return request.post('/py-api/image_preview', data)
+}
+
 export function dataClear(data) {
     return request.post('/py-api/data_clear', data)
 }

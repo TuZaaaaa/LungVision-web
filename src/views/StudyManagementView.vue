@@ -12,7 +12,8 @@ import {
 import {ElMessage, ElMessageBox} from "element-plus";
 import dayjs from "dayjs";
 import DataImportView from "@/views/DataImportView.vue";
-import VueOfficePdf from '@vue-office/pdf'  // 确保已安装并正确配置该组件
+import VueOfficePdf from '@vue-office/pdf'
+import ImagePreviewView from "@/views/ImagePreviewView.vue";  // 确保已安装并正确配置该组件
 
 
 const loading = ref(false)
@@ -36,6 +37,7 @@ const input = ref('')
 const insertDialogFormVisible = ref(false)
 const updateDialogFormVisible = ref(false)
 const uploadDialogVisible = ref(false)
+const imagePreviewDialogVisible = ref(false)
 const reportDialogVisible = ref(false)
 const insertForm = ref({
   patientId: '',
@@ -281,6 +283,15 @@ const reportGenerate = () => {
       })
 }
 
+const imagePreview = () => {
+  selectStudyId.value = selectedRows.value[0].id
+  if (selectedRows.value.length !== 1) {
+    ElMessage.error('请选择一行进行图像处理')
+    return
+  }
+  imagePreviewDialogVisible.value = true
+}
+
 const downloadPdf = () => {
   // 创建临时 a 标签并触发下载
   const link = document.createElement('a')
@@ -327,6 +338,12 @@ const downloadPdf = () => {
       </el-button>
       <el-button type="primary" @click="reportGenerate">
         报告生成
+        <el-icon class="el-icon--right">
+          <Document/>
+        </el-icon>
+      </el-button>
+      <el-button type="primary" @click="imagePreview">
+        可视化预览
         <el-icon class="el-icon--right">
           <Document/>
         </el-icon>
@@ -430,6 +447,10 @@ const downloadPdf = () => {
     <el-dialog title="数据导入" v-model="uploadDialogVisible">
       <DataImportView :studyId="selectStudyId"/>
     </el-dialog>
+
+    <el-dialog fullscreen title="可视化预览" v-model="imagePreviewDialogVisible" class="preview">
+      <ImagePreviewView :studyId="selectStudyId"/>
+    </el-dialog>
   </div>
 
   <el-dialog title="报告预览" v-model="reportDialogVisible" fullscreen>
@@ -466,5 +487,9 @@ const downloadPdf = () => {
 :deep(.vue-office-pdf-wrapper) {
   padding-top: 0 !important;
   background-color: transparent !important;;
+}
+
+.preview {
+  margin-top: -20px;
 }
 </style>
