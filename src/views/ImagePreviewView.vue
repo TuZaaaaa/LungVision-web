@@ -3,6 +3,8 @@ import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { ElSlider, ElIcon } from 'element-plus';
 import { Loading } from '@element-plus/icons-vue';
 import {imagePreview, imagePreviewCount} from "@/api/study.js";
+import {debounce, throttle} from "lodash-es";
+import {onUnmounted} from "vue-demi";
 
 // 默认返回邻近 5 张
 const defaultWindowSize = 5;
@@ -54,7 +56,12 @@ const fetchWindow = async () => {
   })
 };
 
-// 新增：滚轮处理
+
+// 防抖包装
+// 延迟 300ms，只有在 300ms 内没有新请求才执行，避免抖动时多次请求
+const debouncedFetchWindow = debounce(fetchWindow, 300);
+
+// 滚轮处理
 const onWheel = (e) => {
   e.preventDefault(); // 阻止页面滚动
   if (e.deltaY > 0) {
@@ -66,16 +73,25 @@ const onWheel = (e) => {
   }
 };
 
+// 节流包装
+// 限制滚轮事件每 100ms 触发一次，防止滚动过快
+const throttledOnWheel = throttle(onWheel, 100);
+
 onMounted(() => {
   fetchMeta();
   fetchWindow();
   window.addEventListener('wheel', onWheel, { passive: false });
 });
 
+// 卸载时清理监听
+onUnmounted(() => {
+  window.removeEventListener('wheel', throttledOnWheel);
+});
+
 watch(
     () => [current.value, props.studyId],
     () => {
-      fetchWindow();
+      debouncedFetchWindow();
     }
 );
 
@@ -99,7 +115,7 @@ const onSliderChange = val => {
 </script>
 
 <template>
-  <div id="imagePreview" @wheel.prevent="onWheel" style="overflow: hidden;">
+  <div id="imagePreview" @wheel.prevent="throttledOnWheel" style="overflow: hidden;">
     <!-- 只有当总切片数大于 0 时渲染滑块 -->
     <div v-if="meta.total > 0">
       <el-slider
