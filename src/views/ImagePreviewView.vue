@@ -22,6 +22,9 @@ const windowImgs = reactive({});
 const current = ref(0);
 const loading = ref(false);
 
+const selectOrientationName = ref('r')
+const OrientationNameOptions = ref([{value: 'r', label: '冠切面'}, {value: 's', label: '矢切面'}, {value: 'a', label: '轴切面'}])
+
 const props = defineProps(['studyId'])
 
 // 获取总切片数
@@ -112,9 +115,38 @@ const onSliderChange = val => {
   current.value = val;
 };
 
+const handleTaskNameSelectionChange = (val) => {
+  console.log(val)
+  if (val === '' || val === undefined) {
+    return
+  }
+  // 更新维度取值
+  orientation.value = val
+  queryData.value.orientation = val
+  fetchMeta();
+  fetchWindow();
+}
+
 </script>
 
 <template>
+  <el-row id="flex flex-wrap gap-4 items-cente">
+    <el-select
+        v-model="selectOrientationName"
+        @change="handleTaskNameSelectionChange"
+        clearable
+        placeholder="维度"
+        size="large"
+        style="margin-left: 20px;width: 150px"
+    >
+      <el-option
+          v-for="item in OrientationNameOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+      />
+    </el-select>
+  </el-row>
   <div id="imagePreview" @wheel.prevent="throttledOnWheel" style="overflow: hidden;">
     <!-- 只有当总切片数大于 0 时渲染滑块 -->
     <div v-if="meta.total > 0">
